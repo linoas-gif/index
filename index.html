@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Localisation en temps réel</title>
+</head>
+<body>
+    <h1>Suivi de localisation en temps réel</h1>
+    <p>Cliquez sur le bouton ci-dessous pour partager votre position :</p>
+    <button onclick="getLocation()">Partager ma position</button>
+    <p id="location">Position en attente...</p>
+
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition(showPosition, showError);
+            } else {
+                document.getElementById("location").innerHTML = "La géolocalisation n'est pas supportée par ce navigateur.";
+            }
+        }
+
+        function showPosition(position) {
+            const locationData = "Latitude : " + position.coords.latitude +
+                                 ", Longitude : " + position.coords.longitude +
+                                 ", Précision : " + position.coords.accuracy + " mètres.";
+            document.getElementById("location").innerHTML = locationData;
+        }
+
+        function showError(error) {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    document.getElementById("location").innerHTML = "Vous avez refusé la permission de partager votre position.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    document.getElementById("location").innerHTML = "Les informations de localisation ne sont pas disponibles.";
+                    break;
+                case error.TIMEOUT:
+                    document.getElementById("location").innerHTML = "La demande de localisation a expiré.";
+                    break;
+                default:
+                    document.getElementById("location").innerHTML = "Une erreur inconnue est survenue.";
+                    break;
+            }
+        }
+    </script>
+</body>
+</html>
